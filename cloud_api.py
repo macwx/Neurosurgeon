@@ -1,3 +1,5 @@
+import subprocess
+
 import torch
 import sys,getopt
 from net import net_utils
@@ -16,6 +18,7 @@ from net.monitor_server import MonitorServer
 if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(sys.argv[1:], "i:p:d:", ["ip=","port=","device"])
+        print(f"云端任务开始执行：{ opts, args}")
     except getopt.GetoptError:
         print('input argv error')
         sys.exit(2)
@@ -47,4 +50,14 @@ if __name__ == '__main__':
         net_utils.start_server(socket_server,device)
 
         monitor_ser.terminate()
+        print(f"{ ip,port}: {device}")
 
+
+
+if __name__ == '__main__':
+    try:
+        # 使用直接的命令字符串
+        subprocess.run("python cloud_api.py -i 127.0.0.1 -p 9999 -d cpu", shell=True, check=True)
+        print("Command executed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Command failed with error: {e}")

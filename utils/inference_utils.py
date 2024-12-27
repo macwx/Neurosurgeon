@@ -6,6 +6,7 @@ from models.LeNet import LeNet
 from models.AlexNet import AlexNet
 from models.VggNet import vgg16_bn
 from models.MobileNet import MobileNet
+from models.YOLOv8 import YOLOv8
 from utils.excel_utils import *
 
 
@@ -24,6 +25,8 @@ def get_dnn_model(arg: str):
         return LeNet(input_channels=input_channels)
     elif arg == "mobile_net":
         return MobileNet(input_channels=input_channels)
+    elif arg =="yolov8":
+        return YOLOv8(input_channels=input_channels)
     else:
         raise RuntimeError("没有对应的DNN模型")
 
@@ -156,6 +159,9 @@ def warmUp(model,input_data,device):
     """
     epoch = 10
     model = model.to(device)
+
+
+
     for i in range(1):
         if device == "cuda":
             warmUpGpu(model, input_data, device, epoch)

@@ -27,7 +27,7 @@ def start_server(socket_server,device):
 
     # 接收模型分层点
     partition_point = get_short_data(conn)
-    print(f"get partition point successfully.")
+    print(f"get partition point successfully. {partition_point}")
 
     _,cloud_model = inference_utils.model_partition(model, partition_point)
     cloud_model = cloud_model.to(device)

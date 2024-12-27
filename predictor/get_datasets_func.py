@@ -7,17 +7,17 @@ def get_datasets_by_kernel_kind(kernel_kind):
     :param kernel_kind: kernel_kind : 0 - conv2d , 1 - dw_conv2d , 2 - linear, 3 - maxPool2d , 4 - avgPool2d, 5 - BatchNorm
     :return: features,targets
     """
-    if kernel_kind == 0:
+    if kernel_kind == 0: # 卷积层 (conv2d)
         return get_datasets_for_conv
-    elif kernel_kind == 1:
+    elif kernel_kind == 1: # 深度可分离卷积层 (dw_conv2d)
         return get_datasets_for_dw_conv
-    elif kernel_kind == 2:
+    elif kernel_kind == 2: # 全连接层 (linear )
         return get_datasets_for_linear
-    elif kernel_kind == 3:
+    elif kernel_kind == 3: # 最大池化层 (maxPool2d)
         return get_datasets_for_maxpool
-    elif kernel_kind == 4:
+    elif kernel_kind == 4: # 平均池化层 (avgPool2d)
         return get_datasets_for_avgpool
-    elif kernel_kind == 5:
+    elif kernel_kind == 5: # 批归一化层 (BatchNorm)
         return get_datasets_for_batchnorm
     else:
         raise RuntimeError("没有这种类型的DNN层")

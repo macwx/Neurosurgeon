@@ -1,3 +1,5 @@
+import subprocess
+
 import torch
 import sys,getopt
 from net import net_utils
@@ -71,3 +73,11 @@ if __name__ == '__main__':
     # 使用云边协同的方式进行模拟
     net_utils.start_client(ip,port,x,model_type,partition_point,device)
 
+
+if __name__ == '__main__':
+    try:
+        # 使用直接的命令字符串
+        subprocess.run("python edge_api.py -i 127.0.0.1 -p 9999 -d cpu -t yolov8", shell=True, check=True)
+        print("Command executed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Command failed with error: {e}")
