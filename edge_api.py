@@ -13,6 +13,10 @@ from net.monitor_client import MonitorClient
 from multiprocessing import Process
 import multiprocessing
 
+from torchvision import transforms
+from PIL import Image
+import torch
+
 
 """
     边缘设备api，用于启动边缘设备，进行前半部分计算后，将中间数据传递给云端设备
@@ -30,7 +34,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     # 处理 options中以元组的方式存在(opt,arg)
-    model_type = ""
+    model_type = "alex_net"
     ip,port = "127.0.0.1",999
     device = "cpu"
     for opt, arg in opts:
@@ -60,8 +64,30 @@ if __name__ == '__main__':
 
 
     # step2 准备input数据
-    x = torch.rand(size=(1, 3, 224, 224), requires_grad=False)
+    # x = torch.rand(size=(1, 3, 224, 224), requires_grad=False)
+    # x = x.to(device)
+    # 1. 加载图像文件
+    image_path = 'img.png'  # 替换为你的图像文件路径
+    image = Image.open(image_path)
+
+    # 2. 定义图像预处理过程（包括调整大小、转换为Tensor、标准化）
+    transform = transforms.Compose([
+        transforms.Resize(256),  # 调整图像大小
+        transforms.CenterCrop(224),  # 裁剪为224x224的图像
+        transforms.ToTensor(),  # 转换为Tensor类型
+        transforms.Normalize(  # 图像归一化，注意这里是基于ImageNet的均值和标准差
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
+    ])
+
+    # 3. 应用预处理
+    x = transform(image).unsqueeze(0)  # 添加批次维度，变成(1, 3, 224, 224)
+
+    # 4. 将图像数据移动到目标设备（CPU或GPU）
     x = x.to(device)
+
+    print(x.shape)  # 输出图像的Tensor形状: torch.Size([1, 3, 224, 224])
 
     # 客户端进行传输
     model = get_dnn_model(model_type)

@@ -41,6 +41,7 @@ def scheduler_for_bandwidth_monitor_cloud(ip, interval):
 """
 if __name__ == '__main__':
     try:
+        print("云端任务开始监听...")
         opts, args = getopt.getopt(sys.argv[1:], "i:p:d:", ["ip=","port=","device"])
     except getopt.GetoptError:
         print('input argv error')
